@@ -1,9 +1,15 @@
 # PeselBmiWpf
 
-Simple desktop app to calculate date of birth and sex, based on PESEL number. Additionaly the app calculate BMI.
+Simple desktop app to calculate date of birth, sex and age based on PESEL number. Additionaly the app calculate BMI and BMI categories.
+
+App allows to add data to the list which is later saved to .json file.
 
 App created with **WPF** framework in **C#**.
 
-![obraz](https://github.com/user-attachments/assets/1d0e8f8b-971c-45bb-82d3-9cb48befa14d)
+![obraz](https://github.com/user-attachments/assets/cf60838f-81a4-429c-90ea-f4a89b25fc6b)
 
-![obraz](https://github.com/user-attachments/assets/567883f1-461c-40dd-bc8f-2e9a6e1d9b0b)
+
+## TODO:
+* Add option to edit records
+
+
