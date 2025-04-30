@@ -1,0 +1,41 @@
+[
+  {
+    "firstName": "John",
+    "lastName": "Doe",
+    "pesel": "90010112355",
+    "bmiRecords": [
+      {
+        "date": "2025-04-28T14:35:00",
+        "weight": 75,
+        "height": 180
+      },
+      {
+        "date": "2025-04-28T14:35:00",
+        "weight": 78,
+        "height": 180
+      },
+      {
+        "date": "2025-04-30T17:26:53.2301953+02:00",
+        "weight": 76,
+        "height": 181
+      }
+    ]
+  },
+  {
+    "firstName": "Anna",
+    "lastName": "Smith",
+    "pesel": "85121554321",
+    "bmiRecords": [
+      {
+        "date": "2025-04-28T14:35:00",
+        "weight": 65,
+        "height": 170
+      },
+      {
+        "date": "2025-04-30T17:31:59.73808+02:00",
+        "weight": 66,
+        "height": 170
+      }
+    ]
+  }
+]
