@@ -1,18 +1,43 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace PeselBmiWpf.Models
 {
-    public class BmiRecord
+    public class BmiRecord : INotifyPropertyChanged
     {
+        private double _weight;
+        public double Weight // in kg
+        {
+            get => _weight;
+            set
+            {
+                _weight = value;
+                OnPropertyChanged(nameof(Weight));
+                OnPropertyChanged(nameof(Bmi));
+                OnPropertyChanged(nameof(BmiCategory));
+            }
+        }
+
+        private double _height;
+        public double Height // in cm
+        {
+            get => _height;
+            set
+            {
+                _height = value;
+                OnPropertyChanged(nameof(Height));
+                OnPropertyChanged(nameof(Bmi));
+                OnPropertyChanged(nameof(BmiCategory));
+            }
+        }
+
         public DateTime Date { get; set; } = DateTime.Now;
-        public double Weight { get; set; } // in kg
-        public double Height { get; set; } // in cm
 
         [JsonIgnore]
         public double Bmi => CalculateBmi();
         
         [JsonIgnore]
-        public string BmiCategory => GetBmiCategory(Bmi);
+        public string BmiCategory => GetBmiCategory();
 
 
         // BMI = weight (kg) / (height (m) * height (m))
@@ -22,16 +47,22 @@ namespace PeselBmiWpf.Models
             return Math.Round(Weight / (height * height), 2);
         }
 
-        private static string GetBmiCategory(double bmi)
+        private string GetBmiCategory()
         {
-            if (bmi < 16)  return "Wygłodzenie";
-            else if (bmi < 17) return "Wychudzenie";
-            else if (bmi < 18.5) return "Niedowaga";
-            else if (bmi < 25) return "Waga prawidłowa";
-            else if (bmi < 30) return "Nadwaga";
-            else if (bmi < 35) return "Otyłość I stopnia";
-            else if (bmi < 40) return "Otyłość II stopnia";
+            if (Bmi < 16)  return "Wygłodzenie";
+            else if (Bmi < 17) return "Wychudzenie";
+            else if (Bmi < 18.5) return "Niedowaga";
+            else if (Bmi < 25) return "Waga prawidłowa";
+            else if (Bmi < 30) return "Nadwaga";
+            else if (Bmi < 35) return "Otyłość I stopnia";
+            else if (Bmi < 40) return "Otyłość II stopnia";
             else return "Otyłość III stopnia";
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

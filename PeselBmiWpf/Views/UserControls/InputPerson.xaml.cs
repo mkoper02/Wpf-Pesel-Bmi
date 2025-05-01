@@ -6,14 +6,14 @@ namespace PeselBmiWpf.Views.UserControls
 {
     public partial class InputPerson : UserControl
     {
-        public event Action<Person> PersonAdded;
+        public event Action<Person>? PersonAdded;
 
         public InputPerson()
         {
             InitializeComponent();
         }
 
-        private void AddPersonButton_Click(object sender, RoutedEventArgs e)
+        private bool ValidateInput()
         {
             // Validate input fields
             if (string.IsNullOrWhiteSpace(FirstNameInputTextBox.Input.Text) ||
@@ -21,12 +21,22 @@ namespace PeselBmiWpf.Views.UserControls
                 string.IsNullOrWhiteSpace(PeselInputTextBox.Input.Text))
             {
                 MessageBox.Show("Wszystkie pola są wymagane.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
+                return false;
             }
 
             if (!Person.IsPeselValid(PeselInputTextBox.Input.Text))
             {
                 MessageBox.Show("Pesel jest niepoprawny.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void AddPersonButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!ValidateInput())
+            {
                 return;
             }
 
@@ -39,15 +49,32 @@ namespace PeselBmiWpf.Views.UserControls
 
             // Raise the PersonAdded event
             PersonAdded?.Invoke(person);
-
-            FirstNameInputTextBox.Input.Text = string.Empty;
-            LastNameInputTextBox.Input.Text = string.Empty;
-            PeselInputTextBox.Input.Text = string.Empty;
         }
 
         private void UpdatePersonButton_Click(object sender, RoutedEventArgs e)
         {
+            if (!ValidateInput())
+            {
+                return;
+            }
 
+            // Update the binding source for pesel
+            var firstNameBinding = FirstNameInputTextBox.Input.GetBindingExpression(TextBox.TextProperty);
+            var lastNameBinding = LastNameInputTextBox.Input.GetBindingExpression(TextBox.TextProperty);
+            var peselBinding = PeselInputTextBox.Input.GetBindingExpression(TextBox.TextProperty);
+
+            firstNameBinding?.UpdateSource();
+            lastNameBinding?.UpdateSource();
+            peselBinding?.UpdateSource();
+
+            MessageBox.Show("Dane zostały zaktualizowane.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ClearPersonButton_Click(object sender, RoutedEventArgs e)
+        {
+            FirstNameInputTextBox.Input.Text = string.Empty;
+            LastNameInputTextBox.Input.Text = string.Empty;
+            PeselInputTextBox.Input.Text = string.Empty;
         }
     }
 }

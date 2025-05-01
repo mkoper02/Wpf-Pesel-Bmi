@@ -17,21 +17,28 @@
 
         <Label Content="Dodaj nową osobę:" FontSize="18" FontWeight="Bold" Padding="0 10 0 0"/>
 
-        <local:InputTextBox x:Name="FirstNameInputTextBox" Text="Imię:" Grid.Row="1"/>
-        <local:InputTextBox x:Name="LastNameInputTextBox" Text="Nazwisko:" Grid.Row="2"/>
-        <local:InputTextBox x:Name="PeselInputTextBox" Text="Pesel:" Grid.Row="3"/>
+        <local:InputTextBox x:Name="FirstNameInputTextBox" LabelText="Imię:" 
+                            Text="{Binding FirstName}" Grid.Row="1"/>
+        <local:InputTextBox x:Name="LastNameInputTextBox" LabelText="Nazwisko:"
+                             Text="{Binding LastName}" Grid.Row="2"/>
+        <local:InputTextBox x:Name="PeselInputTextBox" LabelText="Pesel:" 
+                            Text="{Binding Pesel}" Grid.Row="3"/>
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
 
             <Button x:Name="AddPersonButton" Click="AddPersonButton_Click" 
                     Grid.Column="0" Content="Dodaj Osobę" FontSize="12" Margin="0 5 5 5" />
 
             <Button x:Name="UpdatePersonButton" Click="UpdatePersonButton_Click"
-                    Grid.Column="1" Content="Aktualizuj Dane" FontSize="12" Margin="0 5 0 5"/>
+                    Grid.Column="1" Content="Aktualizuj Dane" FontSize="12" Margin="0 5 5 5"/>
+
+            <Button x:Name="ClearPersonButton" Click="ClearPersonButton_Click"
+                    Grid.Column="2" Content="Wyczyść" FontSize="12" Margin="0 5 0 5"/>
 
         </Grid>
     </Grid>

@@ -1,15 +1,47 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
+using System.ComponentModel;
 
 namespace PeselBmiWpf.Models
 {
-    public class Person
+    public class Person : INotifyPropertyChanged
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Pesel { get; set; } = string.Empty;
-        public ObservableCollection<BmiRecord> BmiRecords { get; set; } = [];
+        private string _firstName = string.Empty;
+        public string FirstName
+        {
+            get => _firstName;
+            set
+            {
+                _firstName = value;
+                OnPropertyChanged(nameof(FirstName));
+            }
+        }
 
+        private string _lastName = string.Empty;
+        public string LastName
+        {
+            get => _lastName;
+            set
+            {
+                _lastName = value;
+                OnPropertyChanged(nameof(LastName));
+            }
+        }
+
+        private string _pesel = string.Empty;
+        public string Pesel
+        {
+            get => _pesel;
+            set
+            {
+                _pesel = value;
+                OnPropertyChanged(nameof(Pesel));
+                OnPropertyChanged(nameof(BirthDate));
+                OnPropertyChanged(nameof(Sex));
+                OnPropertyChanged(nameof(Age));
+            }
+        }
+        public ObservableCollection<BmiRecord> BmiRecords { get; set; } = [];
 
         [JsonIgnore]
         public DateOnly BirthDate => ExtractDateOfBirth(Pesel) ?? new DateOnly(0, 0, 0);
@@ -74,9 +106,8 @@ namespace PeselBmiWpf.Models
             return (pesel[9] % 2 == 0) ? 'F' : 'M';
         }
 
-        public static Boolean IsPeselValid(string pesel)
+        public static bool IsPeselValid(string pesel)
         {
-            // Check pesel length
             if (pesel.Length != 11)
             {
                 return false;
@@ -88,13 +119,18 @@ namespace PeselBmiWpf.Models
                 return false;
             }
 
-            // Check date of birth
             if (ExtractDateOfBirth(pesel) is null)
             {
                 return false;
             }
 
             return true;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -25,7 +25,7 @@
         </Grid>
 
         <!-- Input BMI -->
-        <Grid Grid.Row="1" Grid.Column="0" DataContext="{Binding SelectedPerson}" Margin="10 0 0 0">
+        <Grid Grid.Row="1" Grid.Column="0" DataContext="{Binding SelectedBmiRecord}" Margin="10 0 0 0">
             <view:InputBmiData x:Name="InputBmiData" Margin="8 0 8 8"/>
         </Grid>
 
@@ -37,12 +37,13 @@
               CanUserAddRows="False"
               CanUserDeleteRows="True"
               Margin="8"
-              ColumnWidth="*">
+              ColumnWidth="*"
+              PreviewKeyDown="DataGrid_PreviewKeyDown">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Pesel" Binding="{Binding Pesel}" IsReadOnly="True" Width="1.2*"/>
-                    <DataGridTextColumn Header="Data urodzenia" Binding="{Binding BirthDate}" IsReadOnly="True" Width="1.2*"/>
+                    <DataGridTextColumn Header="Data urodzenia" Binding="{Binding BirthDate, StringFormat=dd.MM.yyyy}" IsReadOnly="True" Width="1.2*"/>
                     <DataGridTextColumn Header="Płeć" Binding="{Binding Sex}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Wiek" Binding="{Binding Age}" IsReadOnly="True"/>
                 </DataGrid.Columns>
@@ -52,14 +53,16 @@
         <!-- List of BMI -->
         <Grid Grid.Row="1" Grid.Column="1" Margin="0 0 0 0">
             <DataGrid Name="DataGridBmi" ItemsSource="{Binding SelectedBmiHistory}" 
+              SelectedItem="{Binding SelectedBmiRecord}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
               CanUserDeleteRows="True"
               Margin="8"
-              ColumnWidth="*">
+              ColumnWidth="*"
+              PreviewKeyDown="DataGrid_PreviewKeyDown">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Wzrost (cm)" Binding="{Binding Height}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Waga (kg)" Binding="{Binding Weight}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Masa (kg)" Binding="{Binding Weight}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Data Pomiaru" Binding="{Binding Date, StringFormat=dd.MM.yyyy HH:mm}" IsReadOnly="True" Width="1.5*"/>
                     <DataGridTextColumn Header="BMI" Binding="{Binding Bmi}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Kategoria" Binding="{Binding BmiCategory}" IsReadOnly="True" Width="1.5*"/>

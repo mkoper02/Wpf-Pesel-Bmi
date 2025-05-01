@@ -11,9 +11,8 @@ public class MainViewModel : INotifyPropertyChanged
     public ObservableCollection<Person> People { get; set; } = [];
     public ObservableCollection<BmiRecord> SelectedBmiHistory => SelectedPerson?.BmiRecords ?? [];
 
-    private Person _selectedPerson;
-
-    public Person SelectedPerson
+    private Person? _selectedPerson;
+    public Person? SelectedPerson
     {
         get => _selectedPerson;
         set
@@ -21,6 +20,17 @@ public class MainViewModel : INotifyPropertyChanged
             _selectedPerson = value;
             OnPropertyChanged(nameof(SelectedPerson));
             OnPropertyChanged(nameof(SelectedBmiHistory));
+        }
+    }
+
+    private BmiRecord? _selectedBmiRecord;
+    public BmiRecord? SelectedBmiRecord
+    {
+        get => _selectedBmiRecord;
+        set
+        {
+            _selectedBmiRecord = value;
+            OnPropertyChanged(nameof(SelectedBmiRecord));
         }
     }
 
@@ -78,6 +88,6 @@ public class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
     protected void OnPropertyChanged(string prop) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
 }

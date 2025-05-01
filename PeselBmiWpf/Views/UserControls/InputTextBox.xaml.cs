@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PeselBmiWpf.Views.UserControls
 {
-    /// <summary>
-    /// Interaction logic for InputTextBox.xaml
-    /// </summary>
     public partial class InputTextBox : UserControl
     {
         public InputTextBox()
         {
             InitializeComponent();
+        }
+
+        // Dependency Property for LabelText
+        public static readonly DependencyProperty LabelTextProperty =
+            DependencyProperty.Register(
+                "LabelText",
+                typeof(string),
+                typeof(InputTextBox),
+                new PropertyMetadata(string.Empty));
+
+        public string LabelText
+        {
+            get => (string)GetValue(LabelTextProperty);
+            set => SetValue(LabelTextProperty, value);
         }
 
         // Dependency Property for Text
@@ -31,7 +30,7 @@ namespace PeselBmiWpf.Views.UserControls
                 "Text",
                 typeof(string),
                 typeof(InputTextBox),
-                new PropertyMetadata(string.Empty));
+                new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         public string Text
         {
