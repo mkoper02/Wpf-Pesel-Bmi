@@ -49,6 +49,7 @@ namespace PeselBmiWpf.Views.UserControls
 
             // Raise the PersonAdded event
             PersonAdded?.Invoke(person);
+            ClearPersonInputTextBox();
         }
 
         private void UpdatePersonButton_Click(object sender, RoutedEventArgs e)
@@ -68,9 +69,15 @@ namespace PeselBmiWpf.Views.UserControls
             peselBinding?.UpdateSource();
 
             MessageBox.Show("Dane zostały zaktualizowane.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+            ClearPersonInputTextBox();
         }
 
         private void ClearPersonButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearPersonInputTextBox();
+        }
+
+        private void ClearPersonInputTextBox()
         {
             FirstNameInputTextBox.Input.Text = string.Empty;
             LastNameInputTextBox.Input.Text = string.Empty;
@@ -78,3 +85,4 @@ namespace PeselBmiWpf.Views.UserControls
         }
     }
 }
+

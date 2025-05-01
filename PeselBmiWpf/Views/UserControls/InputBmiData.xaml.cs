@@ -53,6 +53,7 @@ namespace PeselBmiWpf.Views.UserControls
 
             // Raise the BmiDataAdded event
             BmiDataAdded?.Invoke(bmiRecord);
+            ClearBmiInputTextBox();
         }
 
         private void UpdateBmiButton_Click(object sender, RoutedEventArgs e)
@@ -70,9 +71,15 @@ namespace PeselBmiWpf.Views.UserControls
             weightBinding?.UpdateSource();
 
             MessageBox.Show("Dane pomiaru zostały zaktualizowane.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
+            ClearBmiInputTextBox();
         }
 
         private void ClearBmiButton_Click(object sender, RoutedEventArgs e)
+        {
+            ClearBmiInputTextBox();
+        }
+
+        private void ClearBmiInputTextBox()
         {
             HeightInputTextBox.Input.Text = string.Empty;
             WeightInputTextBox.Input.Text = string.Empty;
