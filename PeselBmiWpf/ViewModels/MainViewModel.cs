@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Text.Json;
 using System.Windows;
 
 namespace PeselBmiWpf.ViewModels;
@@ -34,53 +33,111 @@ public class MainViewModel : INotifyPropertyChanged
         }
     }
 
-    public MainViewModel(string filePath)
+    public MainViewModel(string peopleFilePath, string bmiFilePath)
     {
-        LoadDataFromJson(filePath);
+        LoadDataFromCsv(peopleFilePath, bmiFilePath);
     }
 
-    private void LoadDataFromJson(string filePath)
+    public void LoadDataFromCsv(string peopleFilePath, string bmiFilePath)
     {
-        if (File.Exists(filePath))
+        if (!File.Exists(peopleFilePath))
         {
-            try
-            {
-                string json = File.ReadAllText(filePath);
-                var people = JsonSerializer.Deserialize<ObservableCollection<Person>>(json, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+            MessageBox.Show($"Nie znaleziono pliku z danymi: {peopleFilePath}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
 
-                if (people != null)
+        if (!File.Exists(bmiFilePath))
+        {
+            MessageBox.Show($"Nie znaleziono pliku z danymi: {bmiFilePath}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        try
+        {
+            // People
+            using (var reader = new StreamReader(peopleFilePath))
+            {
+                var lines = reader.ReadToEnd().Split('\n').Skip(1); // Skip header line
+
+                foreach (var line in lines)
                 {
-                    foreach (var person in people)
+                    if (string.IsNullOrWhiteSpace(line))
                     {
-                        People.Add(person);
+                        continue;
                     }
+
+                    var columns = line.Split(',');
+                    var person = new Person
+                    {
+                        FirstName = columns[0],
+                        LastName = columns[1],
+                        Pesel = columns[2][..11]
+                    };
+
+                    People.Add(person);
                 }
             }
-            catch (Exception ex)
+
+            // Bmi
+            using (var reader = new StreamReader(bmiFilePath))
             {
-                MessageBox.Show($"Błąd podczas wczytywania danych: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                var lines = reader.ReadToEnd().Split('\n').Skip(1); // Skip header line
+                foreach (var line in lines)
+                {
+                    if (string.IsNullOrWhiteSpace(line))
+                    {
+                        continue;
+                    }
+
+                    var columns = line.Split(',');
+                    var bmiRecord = new BmiRecord
+                    {
+                        Weight = double.Parse(columns[1]),
+                        Height = double.Parse(columns[2]),
+                        Date = DateTime.Parse(columns[3])
+                    };
+
+                    // Find the person by PESEL and add the BMI record
+                    var pesel = columns[0];
+                    var person = People.FirstOrDefault(p => p.Pesel == pesel);
+
+                    person?.BmiRecords.Add(bmiRecord);
+                }
             }
         }
-        else
+        catch (Exception ex)
         {
-            MessageBox.Show($"Nie znaleziono pliku z danymi: {filePath}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show($"Błąd podczas wczytywania danych: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
-    public void SaveDataToJson(string filePath)
+    public void SaveDataToCsv(string peopleFilePath, string bmiFilePath)
     {
         try
         {
-            string json = JsonSerializer.Serialize(People, new JsonSerializerOptions
+            // People
+            using (var writer = new StreamWriter(peopleFilePath))
             {
-                WriteIndented = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            });
+                writer.WriteLine("Imię,Nazwisko,PESEL");
 
-            File.WriteAllText(filePath, json);
+                foreach (var person in People)
+                {
+                    writer.WriteLine($"{person.FirstName},{person.LastName},{person.Pesel}");
+                }
+            }
+
+            // Bmi
+            using (var writer = new StreamWriter(bmiFilePath))
+            {
+                writer.WriteLine("PESEL,Masa,Wzrost,Data");
+                foreach (var person in People)
+                {
+                    foreach (var bmiRecord in person.BmiRecords)
+                    {
+                        writer.WriteLine($"{person.Pesel},{bmiRecord.Weight},{bmiRecord.Height},{bmiRecord.Date}");
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {

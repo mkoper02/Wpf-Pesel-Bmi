@@ -6,33 +6,33 @@ namespace PeselBmiWpf.Views
 {
     public partial class MainWindow : Window
     {
-        private readonly string filePath = string.Concat(
-            AppContext.BaseDirectory.AsSpan(0, AppContext.BaseDirectory.IndexOf("bin")),
-            "\\dane.json"
-        );
+        private readonly string projectPath = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin"));
+        private readonly string peopleFilePath;
+        private readonly string bmiFilePath;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            peopleFilePath = string.Concat(projectPath, "Data\\people.csv");
+            bmiFilePath = string.Concat(projectPath,"Data\\bmi.csv");
+
             // Set the DataContext to the MainViewModel
-            var viewModel = new MainViewModel(filePath);
+            var viewModel = new MainViewModel(peopleFilePath, bmiFilePath);
             DataContext = viewModel;
 
             // Subscribe to events
             InputPerson.PersonAdded += OnPersonAdded;
             InputBmiData.BmiDataAdded += OnBmiDataAdded;
 
-            // Save data to JSON when the window is closing
             Closing += (s, e) =>
             {
-                viewModel.SaveDataToJson(filePath);
+                viewModel.SaveDataToCsv(peopleFilePath, bmiFilePath);
             };
         }
 
         private void OnPersonAdded(Person person)
         {
-            // Add the new person to the People collection in the ViewModel
             var viewModel = DataContext as MainViewModel;
             viewModel?.People.Add(person);
         }
