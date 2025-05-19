@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Text.Json.Serialization;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace PeselBmiWpf.Models
 {
@@ -41,17 +39,43 @@ namespace PeselBmiWpf.Models
                 OnPropertyChanged(nameof(Age));
             }
         }
-        public ObservableCollection<BmiRecord> BmiRecords { get; set; } = [];
 
-        [JsonIgnore]
+        private double _height;
+        public double Height
+        {
+            get => _height;
+            set
+            {
+                _height = value;
+                OnPropertyChanged(nameof(Height));
+                OnPropertyChanged(nameof(Bmi));
+                OnPropertyChanged(nameof(BmiCategory));
+            }
+        }
+
+        private double _weight;
+        public double Weight
+        {
+            get => _weight;
+            set
+            {
+                _weight = value;
+                OnPropertyChanged(nameof(Weight));
+                OnPropertyChanged(nameof(Bmi));
+                OnPropertyChanged(nameof(BmiCategory));
+            }
+        }
+
         public DateOnly BirthDate => ExtractDateOfBirth(Pesel) ?? new DateOnly(0, 0, 0);
-
-        [JsonIgnore]
         public char Sex => GetSex(Pesel);
-
-        [JsonIgnore]
         public int Age => DateTime.Now.Year - BirthDate.Year - (DateTime.Now.DayOfYear < BirthDate.DayOfYear ? 1 : 0);
+        public double Bmi => CalculateBmi();
+        public string BmiCategory => GetBmiCategory();
 
+        private static char GetSex(string pesel)
+        {
+            return (pesel[9] % 2 == 0) ? 'F' : 'M';
+        }
 
         private static DateOnly? ExtractDateOfBirth(string pesel)
         {
@@ -100,11 +124,6 @@ namespace PeselBmiWpf.Models
                 return null; // Invalid date
             }
         }      
-    
-        private static char GetSex(string pesel)
-        {
-            return (pesel[9] % 2 == 0) ? 'F' : 'M';
-        }
 
         public static bool IsPeselValid(string pesel)
         {
@@ -127,10 +146,26 @@ namespace PeselBmiWpf.Models
             return true;
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
+        // BMI = weight (kg) / (height (m) * height (m))
+        private double CalculateBmi()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            var heightInMeters = Height / 100;
+            return Math.Round(Weight / (heightInMeters * heightInMeters), 2);
         }
+
+        private string GetBmiCategory()
+        {
+            if (Bmi < 16) return "Wygłodzenie";
+            else if (Bmi < 17) return "Wychudzenie";
+            else if (Bmi < 18.5) return "Niedowaga";
+            else if (Bmi < 25) return "Waga prawidłowa";
+            else if (Bmi < 30) return "Nadwaga";
+            else if (Bmi < 35) return "Otyłość I stopnia";
+            else if (Bmi < 40) return "Otyłość II stopnia";
+            else return "Otyłość III stopnia";
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
