@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PeselBmiWpf.Views"
-        xmlns:view="clr-namespace:PeselBmiWpf.Views.UserControls"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Height="400" Width="850">
@@ -15,18 +14,18 @@
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="43*"/>
-            <ColumnDefinition Width="67*"/>
+            <ColumnDefinition Width="37*"/>
+            <ColumnDefinition Width="63*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Input person -->
         <Grid Grid.Row="0" Grid.Column="0" DataContext="{Binding SelectedPerson}"  Margin="10 0 0 0">
-            <view:InputPerson x:Name="InputPerson" Margin="8 8 8 8"/>
+            <local:InputPerson x:Name="InputPerson" Margin="8 0 8 8"/>
         </Grid>
 
         <!-- Input BMI -->
         <Grid Grid.Row="1" Grid.Column="0" DataContext="{Binding SelectedBmiRecord}" Margin="10 0 0 0">
-            <view:InputBmiData x:Name="InputBmiData" Margin="8 0 8 8"/>
+            <local:InputBmiData x:Name="InputBmiData" Margin="8 0 8 8"/>
         </Grid>
 
         <!-- List of people -->
@@ -62,7 +61,7 @@
               PreviewKeyDown="DataGrid_PreviewKeyDown">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Wzrost (cm)" Binding="{Binding Height}" IsReadOnly="True"/>
-                    <DataGridTextColumn Header="Masa (kg)" Binding="{Binding Weight}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Waga (kg)" Binding="{Binding Weight}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Data Pomiaru" Binding="{Binding Date, StringFormat=dd.MM.yyyy HH:mm}" IsReadOnly="True" Width="1.5*"/>
                     <DataGridTextColumn Header="BMI" Binding="{Binding Bmi}" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Kategoria" Binding="{Binding BmiCategory}" IsReadOnly="True" Width="1.5*"/>

@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PeselBmiWpf.Views.UserControls
+namespace PeselBmiWpf.Views
 {
     public partial class InputPerson : UserControl
     {
@@ -79,10 +79,9 @@ namespace PeselBmiWpf.Views.UserControls
 
         private void ClearPersonInputTextBox()
         {
-            FirstNameInputTextBox.Input.Text = string.Empty;
-            LastNameInputTextBox.Input.Text = string.Empty;
-            PeselInputTextBox.Input.Text = string.Empty;
+            FirstNameInputTextBox.Input.Clear();
+            LastNameInputTextBox.Input.Clear();
+            PeselInputTextBox.Input.Clear();
         }
     }
 }
-

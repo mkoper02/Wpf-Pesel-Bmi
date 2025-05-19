@@ -7,15 +7,13 @@ namespace PeselBmiWpf.Views
     public partial class MainWindow : Window
     {
         private readonly string projectPath = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin"));
-        private readonly string peopleFilePath;
-        private readonly string bmiFilePath;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            peopleFilePath = string.Concat(projectPath, "Data\\people.csv");
-            bmiFilePath = string.Concat(projectPath,"Data\\bmi.csv");
+            var peopleFilePath = string.Concat(projectPath, "Data\\people.csv");
+            var bmiFilePath = string.Concat(projectPath,"Data\\bmi.csv");
 
             // Set the DataContext to the MainViewModel
             var viewModel = new MainViewModel(peopleFilePath, bmiFilePath);
@@ -53,7 +51,6 @@ namespace PeselBmiWpf.Views
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
 
-                // If the user clicks "No", cancel the deletion
                 if (result != MessageBoxResult.Yes)
                 {
                     e.Handled = true; // Prevent the default delete action

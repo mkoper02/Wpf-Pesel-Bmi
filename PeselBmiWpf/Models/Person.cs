@@ -41,17 +41,11 @@ namespace PeselBmiWpf.Models
                 OnPropertyChanged(nameof(Age));
             }
         }
+
         public ObservableCollection<BmiRecord> BmiRecords { get; set; } = [];
-
-        [JsonIgnore]
         public DateOnly BirthDate => ExtractDateOfBirth(Pesel) ?? new DateOnly(0, 0, 0);
-
-        [JsonIgnore]
         public char Sex => GetSex(Pesel);
-
-        [JsonIgnore]
         public int Age => DateTime.Now.Year - BirthDate.Year - (DateTime.Now.DayOfYear < BirthDate.DayOfYear ? 1 : 0);
-
 
         private static DateOnly? ExtractDateOfBirth(string pesel)
         {
@@ -128,9 +122,6 @@ namespace PeselBmiWpf.Models
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

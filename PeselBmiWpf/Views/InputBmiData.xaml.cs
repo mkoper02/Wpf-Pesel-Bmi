@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PeselBmiWpf.Views.UserControls
+namespace PeselBmiWpf.Views
 {
     public partial class InputBmiData : UserControl
     {
@@ -81,8 +81,8 @@ namespace PeselBmiWpf.Views.UserControls
 
         private void ClearBmiInputTextBox()
         {
-            HeightInputTextBox.Input.Text = string.Empty;
-            WeightInputTextBox.Input.Text = string.Empty;
+            HeightInputTextBox.Input.Clear();
+            WeightInputTextBox.Input.Clear();
         }
     }
 }

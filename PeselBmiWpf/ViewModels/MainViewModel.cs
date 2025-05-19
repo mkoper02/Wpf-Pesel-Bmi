@@ -129,7 +129,7 @@ public class MainViewModel : INotifyPropertyChanged
             // Bmi
             using (var writer = new StreamWriter(bmiFilePath))
             {
-                writer.WriteLine("PESEL,Masa,Wzrost,Data");
+                writer.WriteLine("PESEL,Waga,Wzrost,Data");
                 foreach (var person in People)
                 {
                     foreach (var bmiRecord in person.BmiRecords)

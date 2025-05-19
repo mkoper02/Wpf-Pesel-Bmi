@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
 
 namespace PeselBmiWpf.Models
 {
@@ -32,13 +31,8 @@ namespace PeselBmiWpf.Models
         }
 
         public DateTime Date { get; set; } = DateTime.Now;
-
-        [JsonIgnore]
         public double Bmi => CalculateBmi();
-        
-        [JsonIgnore]
         public string BmiCategory => GetBmiCategory();
-
 
         // BMI = weight (kg) / (height (m) * height (m))
         private double CalculateBmi()
@@ -60,9 +54,6 @@ namespace PeselBmiWpf.Models
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
