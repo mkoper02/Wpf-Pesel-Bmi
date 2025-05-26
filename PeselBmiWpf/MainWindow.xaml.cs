@@ -2,26 +2,14 @@
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace PeselBmiWpf
 {
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private readonly string filePath = string.Concat(AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin")), "data.csv");
-        public event Action<Person> PersonAdded;
 
         public ObservableCollection<Person> People { get; set; } = [];
-        private Person? _selectedPerson;
-        public Person? SelectedPerson
-        {
-            get => _selectedPerson;
-            set
-            {
-                _selectedPerson = value;
-                OnPropertyChanged(nameof(SelectedPerson));
-            }
-        }
 
         public MainWindow()
         {
@@ -33,18 +21,11 @@ namespace PeselBmiWpf
             // Set DataContext for data binding
             DataContext = this;
 
-            // Subscribe to event
-            PersonAdded += OnPersonAdded;
-
+            // When the window is closing, save data to CSV file
             Closing += (s, e) =>
             {
                 SaveDataToCsv();
             };
-        }
-
-        private void OnPersonAdded(Person person)
-        {
-            People.Add(person);
         }
 
         private void DataGrid_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -76,38 +57,16 @@ namespace PeselBmiWpf
                 Weight = double.Parse(WeightTextBox.Text)
             };
 
-            // Raise the PersonAdded event
-            PersonAdded.Invoke(person);
-            ClearPersonInputTextBox();
-        }
+            People.Add(person);
 
-        private void UpdatePersonButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (!ValidateInput())
-            {
-                return;
-            }
+            // Notify the UI that the People collection has changed
+            OnPropertyChanged(nameof(People));
 
-            // Update the binding source
-            var firstNameBinding = FirstNameTextBox.GetBindingExpression(TextBox.TextProperty);
-            var lastNameBinding = LastNameTextBox.GetBindingExpression(TextBox.TextProperty);
-            var peselBinding = PeselTextBox.GetBindingExpression(TextBox.TextProperty);
-            var heightBinding = HeightTextBox.GetBindingExpression(TextBox.TextProperty);
-            var weightBinding = WeightTextBox.GetBindingExpression(TextBox.TextProperty);
-
-            firstNameBinding.UpdateSource();
-            lastNameBinding.UpdateSource();
-            peselBinding.UpdateSource();
-            heightBinding.UpdateSource();
-            weightBinding.UpdateSource();
-
-            MessageBox.Show("Dane zostały zaktualizowane.", "Sukces", MessageBoxButton.OK, MessageBoxImage.Information);
-            ClearPersonInputTextBox();
-        }
-
-        private void ClearPersonButton_Click(object sender, RoutedEventArgs e)
-        {
-            ClearPersonInputTextBox();
+            FirstNameTextBox.Clear();
+            LastNameTextBox.Clear();
+            PeselTextBox.Clear();
+            HeightTextBox.Clear();
+            WeightTextBox.Clear();
         }
 
         private bool ValidateInput()
@@ -123,7 +82,7 @@ namespace PeselBmiWpf
                 return false;
             }
 
-            if (!Person.IsPeselValid2(PeselTextBox.Text))
+            if (!IsPeselValid(PeselTextBox.Text))
             {
                 MessageBox.Show("Pesel jest niepoprawny.", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
@@ -144,13 +103,59 @@ namespace PeselBmiWpf
             return true;
         }
 
-        private void ClearPersonInputTextBox()
+        private bool IsPeselValid(string pesel)
         {
-            FirstNameTextBox.Clear();
-            LastNameTextBox.Clear();
-            PeselTextBox.Clear();
-            HeightTextBox.Clear();
-            WeightTextBox.Clear();
+            if (pesel.Length != 11)
+            {
+                return false;
+            }
+
+            // Check if pesel contains only digits
+            if (!long.TryParse(pesel, out _))
+            {
+                return false;
+            }
+
+            int year = int.Parse(pesel.Substring(0, 2));
+            int month = int.Parse(pesel.Substring(2, 2));
+            int day = int.Parse(pesel.Substring(4, 2));
+            int century = 0;
+
+            if (month >= 1 && month <= 12)
+            {
+                century = 1900;
+            }
+            else if (month >= 21 && month <= 32)
+            {
+                month -= 20;
+                century = 2000;
+            }
+            else if (month >= 41 && month <= 52)
+            {
+                month -= 40;
+                century = 2100;
+            }
+            else if (month >= 61 && month <= 72)
+            {
+                month -= 60;
+                century = 2200;
+            }
+            else if (month >= 81 && month <= 92)
+            {
+                month -= 80;
+                century = 1800;
+            }
+            else
+            {
+                return false; // Invalid month
+            }
+
+            if (!DateTime.TryParse($"{year + century}-{month:D2}-{day:D2}", out DateTime _))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void LoadDataFromCsv()

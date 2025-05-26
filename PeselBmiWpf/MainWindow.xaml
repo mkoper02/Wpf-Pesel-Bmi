@@ -13,7 +13,7 @@
             <ColumnDefinition Width="75*"/>
         </Grid.ColumnDefinitions>
 
-        <UniformGrid Rows="7" DataContext="{Binding SelectedPerson}"  Margin="10 0 0 10">
+        <UniformGrid Rows="7" DataContext="" Margin="10 0 0 10">
             <Label Content="Dodaj nową osobę:" FontSize="18" FontWeight="Bold" Padding="0 8 0 0"/>
 
             <!--FirstName-->
@@ -24,13 +24,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Text="Imię" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="15"/>
-                <TextBox x:Name="FirstNameTextBox" 
-            Text="{Binding FirstName, UpdateSourceTrigger=Explicit}"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            Background="LightGray"
-            Padding="0 4 0 4"
-            FontSize="13"/>
+                <TextBox x:Name="FirstNameTextBox" Grid.Column="1" VerticalAlignment="Center" Background="LightGray" Padding="0 4 0 4" FontSize="13"/>
             </Grid>
 
             <!--LastName-->
@@ -41,13 +35,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Text="Nazwisko" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="15"/>
-                <TextBox x:Name="LastNameTextBox" 
-            Text="{Binding LastName, UpdateSourceTrigger=Explicit}"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            Background="LightGray"
-            Padding="0 4 0 4"
-            FontSize="13"/>
+                <TextBox x:Name="LastNameTextBox" Grid.Column="1" VerticalAlignment="Center" Background="LightGray" Padding="0 4 0 4" FontSize="13"/>
             </Grid>
 
             <!--Pesel-->
@@ -58,13 +46,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Text="Pesel" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="15"/>
-                <TextBox x:Name="PeselTextBox" 
-            Text="{Binding Pesel, UpdateSourceTrigger=Explicit}"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            Background="LightGray"
-            Padding="0 4 0 4"
-            FontSize="13"/>
+                <TextBox x:Name="PeselTextBox" Grid.Column="1" VerticalAlignment="Center" Background="LightGray" Padding="0 4 0 4" FontSize="13"/>
             </Grid>
 
             <!--Height-->
@@ -75,13 +57,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Text="Wzrost (cm)" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="15"/>
-                <TextBox x:Name="HeightTextBox" 
-            Text="{Binding Height, UpdateSourceTrigger=Explicit}"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            Background="LightGray"
-            Padding="0 4 0 4"
-            FontSize="13"/>
+                <TextBox x:Name="HeightTextBox" Grid.Column="1" VerticalAlignment="Center" Background="LightGray" Padding="0 4 0 4" FontSize="13"/>
             </Grid>
 
             <!--Weight-->
@@ -92,32 +68,15 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0" Text="Waga (kg)" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="15"/>
-                <TextBox x:Name="WeightTextBox" 
-            Text="{Binding Weight, UpdateSourceTrigger=Explicit}"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            Background="LightGray"
-            Padding="0 4 0 4"
-            FontSize="13"/>
+                <TextBox x:Name="WeightTextBox" Grid.Column="1" VerticalAlignment="Center" Background="LightGray" Padding="0 4 0 4" FontSize="13"/>
             </Grid>
 
-            <!--Buttons-->
-            <Grid Grid.Row="7">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40*"/>
-                    <ColumnDefinition Width="40*"/>
-                    <ColumnDefinition Width="20*"/>
-                </Grid.ColumnDefinitions>
-
-                <Button x:Name="AddPersonButton" Grid.Column="0" Click="AddPersonButton_Click" Content="Dodaj Osobę" FontSize="12" Margin="0 5 5 5"/>
-                <Button x:Name="UpdatePersonButton" Grid.Column="1" Click="UpdatePersonButton_Click" Content="Aktualizuj Dane" FontSize="12" Margin="0 5 5 5"/>
-                <Button x:Name="ClearPersonButton"  Grid.Column="2" Click="ClearPersonButton_Click" Content="Wyczyść" FontSize="12" Margin="0 5 0 5"/>
-            </Grid>
+            <!--Button-->
+            <Button Grid.Row="7" x:Name="AddPersonButton" Click="AddPersonButton_Click" Content="Dodaj Osobę" FontSize="12" Margin="0 5 0 5"/>
         </UniformGrid>
 
         <Grid Grid.Column="1" Margin="0 0 0 0">
             <DataGrid Name="DataGridPerson"  ItemsSource="{Binding People}" 
-              SelectedItem="{Binding SelectedPerson}"
               AutoGenerateColumns="False"
               CanUserAddRows="False"
               CanUserDeleteRows="True"
